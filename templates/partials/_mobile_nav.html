@@ -1,0 +1,65 @@
+{% load static %}
+{% load cart_template_tags %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light secondarynav">
+    <div class="menu">
+        <div class="close-menu">
+            <img src="{% static 'img/close.png' %}" width="20px">
+        </div>
+
+        <ul>
+            <li><a href="/">Featured Items</a></li>
+
+            {% for category in request.user|categories  %}
+            <li>
+                <div class="btn-group dropright">
+                    <a href="{{category.get_absolute_url}}">
+                        {{category.name}}
+                    </a>
+                </div>
+            </li>
+            {% endfor %}
+
+        </ul>
+    </div>
+
+    <div class="mhead">
+        <img class="menu-ham" src="{% static 'img/hamburger.png' %}" width="20px">
+        <header>Menu</header>
+    </div>
+
+
+    <a class="navbar-brand" href="/">
+        <img id="main-logo" src="{% static 'img/logo.png' %}">
+    </a>
+    <div class="icon">
+        <ul>
+            <li><a href="{% url 'core:order-summary' %}"><img src="{% static 'icons/cart 1.png' %}" width="25px"
+                        height="25px"><span
+                        class="badge badge-danger badge-pill mobile-notification">{{ request.user|cart_item_count }}</span></a>
+            </li>
+            <li>
+                <a href="#" class="dropdown" data-toggle="dropdown"><img
+                        src="{% static 'icons/profile.png' %}" width="30px" height="30px"></a>
+                {% if user.is_authenticated %}
+                <div class="dropdown-menu" id="NotLoggedIn">
+                    <a class="dropdown-item" href="{%url 'core:user-order'%}">My Profile</a>
+
+                    <form method="post" action="{% url 'account_logout' %}">
+                        {% csrf_token %}
+                        {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                        {% endif %}
+                        <button class='dropdown-item' type="submit">Logout</button>
+                    </form>
+                </div>
+
+                {%else%}
+                <div class="dropdown-menu" id="NotLoggeddIn">
+                    <a class="dropdown-item" href="{% url 'core:checkout-login' %}">Login</a>
+                </div>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+    <div class="clc"></div>
+</nav>

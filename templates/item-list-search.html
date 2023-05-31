@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Search Results{% endblock title %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block page_content %}
+
+<section class="Desktopbody">
+    <div class="container-fluid db">
+        <h2>Search Results</h2>
+        <div class="filter_menu">
+            <div class="container fm">
+                <div class="fml">
+
+                    <span>Filter By</span>
+                    <select id="tags">
+                        <option value="">All</option>
+                        {% if tags %}
+                        {% for item in tags %}
+                        <option {%if tag_name == item.tag %}selected{%endif%} value={{item.tag}}>{{item.tag}}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+
+                    <span>Sort By</span>
+                    <select id="price-filter">
+                        <option value="">All</option>
+                        <option {%if price_filter == "l2h" %}selected{%endif%} value="l2h">Low to High</option>
+                        <option {%if price_filter == "h2l" %}selected{%endif%} value="h2l">High to Low</option>
+                    </select>
+                </div>
+                <div class="fmr">
+                    <em>{{count}} products</em>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container meat_grid">
+
+
+
+        <div class="row wow bounceInUp" data-wow-duration="2s" data-wow-delay="0.1s">
+
+
+            {% if products %}
+            {% for product in products %}
+
+            <div class="col-md-3">
+                <a href="{{ product.get_absolute_url }}">
+                    <div class="popular-one">
+                        <div class="card">
+                            <img class="card-img-top" src="{{product.image.url}}" alt="meat-one">
+                            <div class="card-body">
+                                <span>{{product.title}}</span>
+                                <p>Rs. {{product.discount_price}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            {% endfor %}
+            {%else%}
+            <h4>No Products Available</h4>
+
+            {% endif %}
+
+
+
+
+        </div>
+
+    </div>
+</section>
+
+<!-- Mobile View Body Starts -->
+<section class="Mobilebody">
+    <div class="container-fluid mbc">
+        <h2>Meat</h2>
+        <div class="mob_filter">
+            <div class="mfl">
+                <span>Filter By</span>
+                <select id="tags-mobile">
+                    <option value="">All</option>
+                    {% if tags %}
+                    {% for item in tags %}
+                    <option {%if tag_name == item.tag %}selected{%endif%} value={{item.tag}}>{{item.tag}}</option>
+                    {% endfor %}
+                    {% endif %}
+                </select>
+
+                <span>Sort By</span>
+                <select id="price-filter-mobile">
+                    <option value="">All</option>
+                    <option {%if price_filter == "l2h" %}selected{%endif%} value="l2h">Low to High</option>
+                    <option {%if price_filter == "h2l" %}selected{%endif%} value="h2l">High to Low</option>
+                </select>
+            </div>
+        </div>
+        <p><em>{{count}} products</em></p>
+    </div>
+
+    <div class="row wow bounceInUp mob-main" data-wow-duration="2s" data-wow-delay="0.1s">
+
+
+        {% if products %}
+        {% for product  in products %}
+
+        <div class="popular-one">
+            <a href="{{ product.get_absolute_url }}">
+                <div class="card">
+                    <img class="card-img-top" src="{{product.image.url}}" alt="meat-one">
+                    <div class="card-body">
+                        <h6 class="card-title">{{product.title}}</h6>
+                        <span>Rs. {{product.discount_price}}</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+        {% endfor %}
+        {%else%}
+
+        <h4>No Products Available</h4>
+
+        {% endif %}
+
+
+
+
+
+    </div>
+
+
+</section>
+<form id="tags-form" method="GET" action="{%url 'core:search'%}">
+    <input name="tag-name" id="tag-name" type="hidden">
+    <input name="keyword" type="hidden" value="{{keyword}}">
+</form>
+<form id="price-form" method="GET" action="{%url 'core:search'%}">
+    <input name="price-filter" id="price-name" type="hidden">
+    <input name="keyword" type="hidden" value="{{keyword}}">
+</form>
+<script>
+    document.getElementById('tags').addEventListener('change', function () {
+        document.getElementById('tag-name').value = this.value;
+        document.getElementById('tags-form').submit();
+    });
+    document.getElementById('tags-mobile').addEventListener('change', function () {
+        document.getElementById('tag-name').value = this.value;
+        document.getElementById('tags-form').submit();
+    });
+
+    document.getElementById('price-filter').addEventListener('change', function () {
+        document.getElementById('price-name').value = this.value;
+        document.getElementById('price-form').submit();
+    });
+
+    document.getElementById('price-filter-mobile').addEventListener('change', function () {
+        document.getElementById('price-name').value = this.value;
+        document.getElementById('price-form').submit();
+    });
+</script>
+{% endblock %}
+
+
+{% block extra_javascript %}
+
+{% endblock extra_javascript %}

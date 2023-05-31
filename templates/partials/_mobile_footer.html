@@ -1,0 +1,27 @@
+<!-- Responsive Footer Starts -->
+{% load cart_template_tags %}
+<section id="resfoot">
+    <div class="container foot">
+        <div class="resfoot1">
+            <h6>Contact</h6>
+            <ul>
+                {% for info in request.user|contacts  %}
+                <li>{{info.location}}</li>
+                <li>{{info.phone}}</li>
+                <li>{{info.email}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="resfoot2">
+            <h6>Categories</h6>
+            <ul>
+                {% for category in request.user|categories  %}
+                <li><a style="color:black;" href="{{category.get_absolute_url}}">{{category.name}}</a></li>
+
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- Responsive Footer Ends -->

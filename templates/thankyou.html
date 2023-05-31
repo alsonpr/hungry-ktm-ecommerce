@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+{% load cart_template_tags %}
+{% block title %}Thank You!{% endblock title %}
+
+{% block extra_css %}
+
+{% endblock %}
+
+{% block page_content %}
+
+<div class="col-md-6 offset-md-3">
+    <hr class="my-5">
+    <!-- form user info -->
+    <div class="card card-outline-secondary">
+        <div class="card-header">
+            <h3 class="mb-2">Thank You !</h3>
+            <span class="mb-0">Your order has been placed successfully with hungry kathmandu</span>
+        </div>
+        <div class="card-body">     
+                <div class="form-group">
+                    <label for="uname1">Your Order number is: {{order_number}}<a style="color:red!important"></a></label>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label form-control-label"></label>
+                    <div class="col-lg-6">
+                        <form method="GET" action="{% url 'core:user-order' %}">
+                            <button class="btn btn-danger btn-lg" type="submit">Go to my Order</button>
+                        </form>
+                    </div>
+                </div>
+                <hr class="my-5">
+                <div class="form-group">
+                    <label for="uname1">For any query you can reach or call us on </label><br>
+                    {% for info in request.user|contacts  %}
+                    {{info.location}} |
+                    {{info.phone}} |
+                    {{info.email}}
+                    {% endfor %}
+                </div>
+               
+              
+               
+        </div>
+    </div>
+    <!-- /form user info -->
+
+</div>
+
+
+{% endblock %}
+
+
+{% block extra_javascript %}
+
+{% endblock extra_javascript %}

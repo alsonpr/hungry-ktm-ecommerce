@@ -1,0 +1,101 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% block title %}Login{% endblock title %}
+{% block extra_css %}
+{% load crispy_forms_tags %}
+{% load socialaccount %}
+{% providers_media_js %}
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+    integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+{% endblock %}
+
+{% block page_content %}
+
+
+<div class="container">
+    <div class="login-page">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6 lp1">
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a {%if signupform.errors %}class="nav-item nav-link" {%else%}class="nav-item nav-link active"
+                            {%endif%} id="nav-login-tab" data-toggle="tab" href="#nav-login" role="tab"
+                            aria-controls="nav-login" aria-selected="true">
+                            Log in</a>
+                        <a {%if signupform.errors %}class="nav-item nav-link active" {%else%}class="nav-item nav-link"
+                            {%endif%} class="nav-item nav-link" id="nav-signup-tab" data-toggle="tab" href="#nav-signup"
+                            role="tab" aria-controls="nav-signup" aria-selected="false">Sign up</a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div {%if signupform.errors %}class="tab-pane fade" {%else%}class="tab-pane fade show active"
+                        {%endif%} id="nav-login" role="tabpanel" aria-labelledby="nav-login-tab">
+
+
+                        <a style="color: black;" class="fb" type="button"
+                            href="{% provider_login_url "facebook" method="js_sdk" %}"><span><i
+                                    class="fab fa-facebook-square"></i></span>Facebook</a>
+                        <a style="color: black;" class="gg" type="button"
+                            href="{% provider_login_url "google" %}"><span><img src="{% static 'img/gg.png' %}"
+                                    height="20px" width="20px"></span>Google</a>
+                        <!-- <p class="loginp">
+                            We keep your details completely private. See our <a href="#">Terms & Conditions</a> and
+                            <a href="#">Privacy Policy</a> for details.
+                        </p> -->
+
+                        <form class="login" method="POST" action="{% url 'core:checkout-login' %}">
+                            {% csrf_token %}
+                            {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                            {% endif %}
+
+                            {{ form|crispy }}
+                            <button class="btn btn-primary btn-lg btn-block" type="submit">Sign In</button>
+                            <a class="btn btn-default" href="{% url 'account_reset_password' %}">Forgot Password ?</a>
+
+                        </form>
+
+                    </div>
+
+                    <div {%if signupform.errors %}class="tab-pane fade show active" {%else%}class="tab-pane fade show"
+                        {%endif%} id="nav-signup" role="tabpanel" aria-labelledby="nav-signup-tab">
+
+                        <a style="color: black;" class="fb" type="button"
+                            href="{% provider_login_url "facebook" method="js_sdk" %}"><span><i
+                                    class="fab fa-facebook-square"></i></span>Facebook</a>
+                        <a style="color: black;" class="gg" type="button"
+                            href="{% provider_login_url "google" %}"><span><img src="{% static 'img/gg.png' %}"
+                                    height="20px" width="20px"></span>Google</a>
+
+                        <form class="signup" id="signup_form" method="post" action="{% url 'core:checkout-signup' %}">
+                            {% csrf_token %}
+                            {{signupform|crispy}}
+                            {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                            {% endif %}
+                            <button class='btn btn-primary btn-lg btn-block' type="submit">SignUp</button>
+                        </form>
+
+
+                        <!-- <p class="psign">By signing up I agree to Hazels cake's <a href="#">Terms & Conditions</a>
+                            and <a href="#">Privacy Policy</a>.</p> -->
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+
+{% block extra_javascript %}
+
+{% endblock %}

@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Cart{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'owl.carousel.min.css' %}">
+{% endblock %}
+
+{% block page_content %}
+
+
+
+<!-- Desktop Body Starts -->
+<section class="Desktopbody">
+
+    <div class="container-fluid">
+        <section id="cart">
+            <h4>Shopping Cart</h4><br>
+            <!-- Table Head -->
+            <div class="cartmain">
+                <!-- Table Left Part -->
+                <div class="cartleft">
+                    <div class="row r1">
+                        <div class="col-md-5">Product</div>
+                        <div class="col-md-2">Price</div>
+                        <div class="col-md-2">Quantity</div>
+                        <div class="col-md-2">Total</div>
+                        <div class="col-md-1"></div>
+                    </div>
+                    {% for order_item in object.items.all %}
+                    <!-- Table Body -->
+                    <div class="row cc">
+                        <div class="col-md-5 cc1">
+                            <div class="cimg"><img src="{{order_item.item.image.url}}"></div>
+                            <div class="ctext"><span>{{order_item.item.title}}</span></div>
+                        </div>
+                        <div class="col-md-2 ctext">
+                            <p>Rs.{{order_item.item.price}}</p>
+                        </div>
+                        <div class="col-md-2 cc2 ctext">
+
+                            <a style="color: black;"
+                                href="{% url 'core:remove-single-item-from-cart' order_item.item.slug %}"><i
+                                    class="fas fa-minus mr-2"></i></a>
+                            {{ order_item.quantity }}
+                            <a style="color: black;" href="{% url 'core:add-to-cart' order_item.item.slug %}"><i
+                                    class="fas fa-plus ml-2"></i></a>
+
+                        </div>
+                        <div class="col-md-2 ctext">
+                            {% if order_item.item.discount_price %}
+                            Rs.{{ order_item.get_total_discount_item_price }}
+
+                            <span class="badge badge-primary">Saving Rs.{{ order_item.get_amount_saved }}</span>
+                            {% else %}
+                            Rs.{{ order_item.get_total_item_price }}
+                            {% endif %}
+
+                        </div>
+                        <div class="col-md-1 ctext"><a href="{% url 'core:remove-from-cart' order_item.item.slug %}"><i
+                                    class="far fa-trash-alt" style="color: black;"></i></a></div>
+                    </div>
+                    {%endfor%}
+
+
+                </div>
+                <!-- Right Part -->
+                <div class="cartright">
+                    <div class="subcart">
+                        {% if object.get_product_total %}
+                        <div class="cs1">
+                            <p>Product total &nbsp &nbsp:<br> 
+                            Delivery Charge &nbsp &nbsp: <br>
+                            Grand Total &nbsp &nbsp:</p>
+                        </div>
+                        <div class="cs2">
+                            <p>
+                                 Rs. {{product_total}}/-<br>
+                                Rs. {{delivery_amount}}/-<br>
+
+                                Rs. {{object.get_total}}/-</p>
+
+
+                        </div>
+                       
+                    </div>
+
+                    
+                    <a href="/checkout" type="button" class="btn btn-primary btn-lg btn-block">
+                        <span>Proceed to checkout</span>
+                    </a>
+                    {% endif %}
+
+
+                    <a href="/" type="button" class="btn btn-info btn-lg btn-block">
+                        <span>Continue Shopping</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+
+</section>
+<!-- Footer Ends -->
+<!-- Desktop Body Ends -->
+<!-- Mobile View Body Starts -->
+<section class="Mobilebody">
+
+    {% include 'partials/_searchbox.html' %}
+
+    <section class="mob-cart">
+        <div class="mobcarthead">
+            <h6>Shopping Cart</h6>
+        </div>
+
+
+        {% for order_item in object.items.all %}
+        <div class="mobcartbody">
+            <div class="mcleft">
+                <img src="{{order_item.item.image.url}}" height="100px" width="100px">
+            </div>
+            <div class="mcright">
+                <span>{{order_item.item.title}}</span>
+                <div class="mcr">
+                    <div class="mcright" style="margin: 2px;">
+
+                        <a style="color: black;"
+                            href="{% url 'core:remove-single-item-from-cart' order_item.item.slug %}"><i
+                                class="fas fa-minus mr-2"></i></a>
+                        {{ order_item.quantity }}
+                        <a style="color: black;" href="{% url 'core:add-to-cart' order_item.item.slug %}"><i
+                                class="fas fa-plus ml-2"></i></a>
+
+                    </div>
+
+                    {% if order_item.item.discount_price %}
+                    Rs.{{ order_item.get_total_discount_item_price }}
+
+                    <!-- <span style="margin-left: 0px !important; margin-bottom: 10px;" class="badge badge-primary">Saving
+                        Rs.{{ order_item.get_amount_saved }}</span> -->
+                    {% else %}
+                    Rs.{{ order_item.get_total_item_price }}
+                    {% endif %}
+
+
+                </div>
+            </div>
+            <div class="mcright1"><a href="{% url 'core:remove-from-cart' order_item.item.slug %}"><i
+                        class="far fa-trash-alt" style="color: black;"></i></a></div>
+        </div>
+        {%endfor%}
+
+    </section>
+
+    <div class="cartright mob-cart">
+        {% if object.get_product_total %}
+
+        <div class="subcart">
+            <div class="cs1">
+                <p>Product total &nbsp &nbsp:<br>
+                 Delivery Charge &nbsp &nbsp: <br>
+                Grand Total &nbsp &nbsp:</p>
+            </div>
+            <div class="cs2">
+                <p>
+                    Rs. {{product_total}}/-<br>
+                   Rs. {{delivery_amount}}/-<br>
+                   Rs. {{object.get_total}}/-</p>
+
+            </div>
+        </div>
+       
+        <a href="/checkout" type="button" class="btn btn-primary btn-lg btn-block">
+            <span>Proceed to Checkout</span>
+        </a>
+        {%endif%}
+        <a href="/" type="button" class="btn btn-info btn-lg btn-block">
+            <span>Continue Shopping</span>
+        </a>
+
+
+
+    </div>
+
+
+
+</section>
+
+{% endblock %}
+
+
+{% block extra_javascript %}
+
+<script type="text/javascript" src="{% static 'js/wow.min.js' %} "></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT"
+    crossorigin="anonymous"></script>
+<script type="text/javascript">
+    $('.menu-ham').click(function () {
+        $('.menu').animate({ left: '0px' }, 100)
+    });
+
+    $('.close-menu').click(function () {
+        $('.menu').animate({ left: '-200px' }, 100)
+    });
+
+</script>
+
+{% endblock extra_javascript %}

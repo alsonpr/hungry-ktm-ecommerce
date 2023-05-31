@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Hungry Kathmandu{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/animate.css' %}">
+
+{% endblock %}
+
+{% block page_content %}
+
+
+
+<!-- Desktop Body Starts -->
+<section class="Desktopbody">
+    <!-- Popular Section Begins -->
+    <section id="Popular">
+        <div class="container-fluid">
+            <h2>Featured Items</h2>
+            <div class="row wow bounceInUp" data-wow-duration="2s" data-wow-delay="0.1s">
+
+                {% for product in products %}
+
+                <div class="col-md-4">
+                    <a href="{{ product.get_absolute_url }}">
+                        <div class="popular-one">
+                            <div class="card">
+                                <img class="card-img-top" src="{{product.image.url}}" alt="meat-one" style="height: 400px;">
+                                <div class="card-body">
+                                    <h4 class="card-title">{{product.title}}</h4>
+                                    <h4>Rs. {{product.discount_price}}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                {% endfor %}
+
+            </div>
+        </div>
+    </section>
+
+
+</section>
+<!-- Desktop Body Ends -->
+<!-- Mobile View Body Starts -->
+<section class="Mobilebody">
+    {% include 'partials/_searchbox.html' %}
+    <section>
+        <h4>Featured Items</h4>
+        <div class="row wow bounceInUp mob-main" data-wow-duration="2s" data-wow-delay="0.1s">
+
+
+            {% for product  in products %}
+
+            <div class="popular-one">
+                <a href="{{ product.get_absolute_url }}">
+                    <div class="card">
+                        <img class="card-img-top" src="{{product.image.url}}" alt="meat-one" style="height: 100px;width: 150px;">
+                        <div class="card-body">
+                            <h6 class="card-title">{{product.title}}</h6>
+                            <span>Rs. {{product.discount_price}}</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+
+            {% endfor %}
+
+
+
+        </div>
+    </section>
+</section>
+
+
+
+{% endblock %}
+
+
+{% block extra_javascript %}
+
+
+{% endblock extra_javascript %}

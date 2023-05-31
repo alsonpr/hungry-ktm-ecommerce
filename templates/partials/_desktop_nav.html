@@ -1,0 +1,81 @@
+<!-- Desktop Navigation Starts -->
+<!-- Navigation Starts -->
+{% load static %}
+{% load cart_template_tags %}
+<div class="container-fluid primary-head-nav" data-wow-duration="2s" data-wow-delay="1s">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow p-2.5 bg-white rounded primarynav">
+        <span></span>
+        <div class="hamburger">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="col-md-3 main-logo">
+            <a href="/">
+                <img src="{% static 'img/logo.png' %}" width="200px">
+            </a>
+        </div>
+        <div class="subnav">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a href="/" type="button" {% if "/" == request.path %}class="btn btn-danger" {%else%}
+                            class="btn btn-default" {%endif%}>Featured Items</a>
+                    </li>
+
+
+                    {% for category in request.user|categories  %}
+                    <li class="nav-item dropdown">
+                        <a href="{{category.get_absolute_url}}" {% if category.get_absolute_url == request.path %}
+                            class="btn btn-danger" {%else%} class="btn btn-default" {%endif%}
+                            type="button">{{category.name}}</a>
+                    </li>
+                    {% endfor %}
+
+
+
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-3 icons">
+            <form method="GET" action="{% url 'core:search' %}">
+                <ul>
+
+                    <li><input style="cursor: pointer;" autocomplete="off" type="search" name="keyword"
+                            placeholder="Search"></li>
+            </form>
+            <li><a href="{% url 'core:order-summary' %}"><img src="{% static 'icons/cart 1.png' %}" width="30px"
+                        height="30px"><span
+                        class="badge badge-danger badge-pill notification">{{ request.user|cart_item_count }}</span></a>
+            </li>
+
+            <li>
+
+                <a href="#" class="dropdown" data-toggle="dropdown"><img
+                        src="{% static 'icons/profile.png' %}" width="30px" height="30px"></a>
+                {% if user.is_authenticated %}
+                <div class="dropdown-menu" id="NotLoggedIn">
+                    <a class="dropdown-item" href="{%url 'core:user-order'%}">My Profile</a>
+
+                    <form method="post" action="{% url 'account_logout' %}">
+                        {% csrf_token %}
+                        {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                        {% endif %}
+                        <button class='dropdown-item' type="submit">Logout</button>
+                    </form>
+                </div>
+
+                {%else%}
+                <div class="dropdown-menu" id="NotLoggeddIn">
+                    <a class="dropdown-item" href="{% url 'core:checkout-login' %}">Login</a>
+                </div>
+                {% endif %}
+
+            </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+<!-- Navigation Ends -->

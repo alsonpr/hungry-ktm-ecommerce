@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Orders{% endblock title %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block page_content %}
+<!-- Desktop Body Starts -->
+<section class="Profile-Desktopbody">
+    <form  method="post" action="{% url 'account_logout' %}">
+        {% csrf_token %}
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+    <section id="Profile">
+        <h4>My Profile</h4>
+        <div class="row proo">
+            <!-- <div class="col-md-4 pro">
+                <img src="img/image.png">
+            </div> -->
+       
+            <div class="col-md-4 pro1">
+               
+                {% if user.username %}
+                <h5>Username: {{user.username}}</h5>
+                {% endif %}
+                
+                {% if user.email %}
+                <p>Email: {{user.email}}</p>
+                {% endif %}
+                
+                
+                
+                    <button class='btn btn-danger' type="submit">Logout</button>
+               
+               
+            </div>
+        
+            <!-- <div class="col-md-4 pro2">
+                <button type="button" class="btn btn-success">Edit</button>
+
+            </div> -->
+        </div>
+    </section>
+</form>
+
+    <!-- Order Starts -->
+    <section id="Order">
+        <h4>My Orders</h4>
+        <p>Total Orders: {{count}}</p>
+        <!--Order Top part-->
+
+
+        {% for order in orders %}
+        <div class="row order-head">
+            <p class="col-md-3 order-top">
+                Delivery Status :
+
+                {%if order.delivery_status == "Pending"%}
+                <span class="badge badge badge-info" style="display: block;">{{order.delivery_status}}</span>
+                {%endif%}
+
+                {%if order.delivery_status == "Delivered"%}
+                <span class="badge badge badge-success" style="display: block;">{{order.delivery_status}}</span>
+                {%endif%}
+
+                {%if order.delivery_status == "Cancelled"%}
+                <span class="badge badge badge-danger" style="display: block;">{{order.delivery_status}}</span>
+                {%endif%}
+
+            </p>
+            <p class="col-md-3 order-top">
+                Payment Status :
+
+                {%if order.payment_status == "Pending"%}
+                <span class="badge badge badge-info" style="display: block;">{{order.payment_status}}</span>
+                {%endif%}
+
+                {%if order.payment_status == "Paid"%}
+                <span class="badge badge badge-success" style="display: block;">{{order.payment_status}}</span>
+                {%endif%}
+
+                {%if order.payment_status == "Void"%}
+                <span class="badge badge badge-danger" style="display: block;">Cancelled</span>
+                {%endif%}
+
+            </p>
+            <p class="col-md-3 order-top">Order Number : {{order.ref_code}}</p>
+            <p class="col-md-3 order-top">Order Date : {{order.ordered_date}}</p>
+            <p class="col-md-3 order-top">Total Price : {{order.total_amount}}</p>
+        </div>
+        <div class="prof-cartmain">
+            <!-- Table Left Part -->
+            <div class="prof-cartleft">
+                <div class="row prof-r1">
+                    <div class="col-md-3">S.N</div>
+                    <div class="col-md-3">Product</div>
+                    <div class="col-md-3">Quantity</div>
+                    <div class="col-md-3">Price</div>
+                </div>
+                <!-- Table Body -->
+
+                {% for item in order.items.all  %}
+
+                <div class="row prof-cc">
+                    <div class="col-md-3">
+                        <div><span>{{forloop.counter}}</span></div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div><span>{{item.item}}</span></div>
+                    </div>
+                    <div class="col-md-3 prof-cc2 prof-ctext">
+                        <p>{{item.quantity}}</p>
+                    </div>
+
+                    <div class="col-md-3 ">
+                        <p>Rs.{{item.price}}</p>
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+        </div>
+        {% endfor %}
+
+
+
+
+
+
+        <!--Pagination Starts-->
+        <!-- <div class="pagination">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div> -->
+        <!--Pagination ends-->
+    </section>
+    <!-- Order Ends -->
+
+
+</section>
+<!-- Footer Ends -->
+<!-- Desktop Body Ends -->
+<!-- Mobile View Body Starts -->
+<section class="Mobilebody">
+    <section id="moborder">
+        <h4>My Orders</h4>
+
+        {% for order in orders %}
+
+        <div class="mobordersub">
+            <div class="moborder1">
+                <h6>Order Number : {{order.ref_code}}</h6>
+            </div>
+            <p>Order Date : {{order.ordered_date}}</p>
+            <p>Delivery Status :
+                {%if order.delivery_status == "Pending"%}
+                <span class="badge badge badge-info" style="display: block;">{{order.delivery_status}}</span>
+                {%endif%}
+
+                {%if order.delivery_status == "Delivered"%}
+                <span class="badge badge badge-success" style="display: block;">{{order.delivery_status}}</span>
+                {%endif%}
+
+                {%if order.delivery_status == "Cancelled"%}
+                <span class="badge badge badge-danger" style="display: block;">{{order.delivery_status}}</span>
+                {%endif%}
+
+            </p>
+            <p>Payment Status :
+                {%if order.payment_status == "Pending"%}
+                <span class="badge badge badge-info" style="display: block;">{{order.payment_status}}</span>
+                {%endif%}
+
+                {%if order.payment_status == "Paid"%}
+                <span class="badge badge badge-success" style="display: block;">{{order.payment_status}}</span>
+                {%endif%}
+
+                {%if order.payment_status == "Void"%}
+                <span class="badge badge badge-danger" style="display: block;">Cancelled</span>
+                {%endif%}
+
+            </p>
+
+            {% for item in order.items.all  %}
+            <div class="moborder3">
+                <div class="row">
+                    <div class="col-4">
+                        {{item.item}}
+                    </div>
+                    <div class="col-4">
+                        Qty ({{item.quantity}})
+                    </div>
+                    <div class="col-4">
+                        Rs. {{item.price}}
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+
+
+
+            <div class="moborder2">
+                <p id="prof-total">Total Price: Rs.{{order.total_amount}}</p>
+            </div>
+
+        </div>
+        {% endfor %}
+
+
+
+        <!--Pagination Starts-->
+        <!-- <div class="pagination-mobile">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination-mobile">
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div> -->
+        <!--Pagination ends-->
+    </section>
+</section>
+
+{% endblock %}
+
+
+{% block extra_javascript %}
+
+{% endblock extra_javascript %}

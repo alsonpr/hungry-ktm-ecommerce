@@ -1,0 +1,125 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% block title %}Dashboard | Admin{% endblock title %}
+{% block extra_css %}
+{% load crispy_forms_tags %}
+{% load socialaccount %}
+{% providers_media_js %}
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+  integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+{% endblock %}
+
+{% block page_content %}
+
+
+<div class="container">
+  <div class="login-page">
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-6 lp1">
+        <nav>
+          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-login-tab" data-toggle="tab" href="#nav-login" role="tab"
+              aria-controls="nav-login" aria-selected="true">
+              Log in</a>
+            <a class="nav-item nav-link" id="nav-signup-tab" data-toggle="tab" href="#nav-signup" role="tab"
+              aria-controls="nav-signup" aria-selected="false">Sign up</a>
+          </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane fade show active" id="nav-login" role="tabpanel" aria-labelledby="nav-login-tab">
+
+            <button class="fb"><a href="#"><span><i class="fab fa-facebook-square"></i></span>Facebook</a></button>
+            <button class="gg"><a href="#"><span><img src="{% static 'img/gg.png' %}" height="20px"
+                    width="20px"></span>Google</a></button>
+            <!-- <p class="loginp">
+              We keep your details completely private. See our <a href="#">Terms & Conditions</a> and
+              <a href="#">Privacy Policy</a> for details.
+            </p> -->
+            <form class="login" method="POST" action="{% url 'core:checkout-login' %}">
+              {% csrf_token %}
+              {% if redirect_field_value %}
+              <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+              {% endif %}
+
+              {{ form|crispy }}
+              <button class="btn btn-primary btn-lg btn-block" type="submit">Sign In</button>
+              <a class="btn btn-default" href="{% url 'account_reset_password' %}">Forgot Password ?</a>
+              <!-- <div class="form-group">
+                                <label for="login-for-email">Email*</label>
+                                <input type="email" class="form-control" id="login-for-email" value=""
+                                    placeholder="Enter your email address">
+                            </div>
+                            <div class="form-group">
+                                <label for="login-password">Password*</label>
+                                <input type="password" class="form-control" id="login-password" value=""
+                                    placeholder="Enter your password">
+                            </div>
+                            <div class="subform">
+                                <div class="form-group form-remember">
+                                    <input type="checkbox" class="form-remember-input" id="remember">
+                                    <label class="form-remember-label" for="remember">Remember me</label>
+                                </div>
+                                <div class="forgotpw">
+                                    <a href="#">Forgot Password?</a>
+                                </div>
+                            </div>
+                            <a href="index.html" type="button" class="btn btn-primary btn-lg btn-block">Log in</a> -->
+
+            </form>
+          </div>
+          <div class="tab-pane fade" id="nav-signup" role="tabpanel" aria-labelledby="nav-signup-tab">
+            <form>
+              <button class="fb"><a href="#"><span><i class="fab fa-facebook-square"></i></span>Facebook</a></button>
+              <button class="gg"><a href="#"><span><img src="img/gg.png" height="20px"
+                      width="20px"></span>Google</a></button>
+              <div class="form-group sform">
+                <label for="fname">First Name*</label>
+                <input type="text" class="form-control" id="fname" value="" placeholder="Enter your first name">
+              </div>
+              <div class="form-group">
+                <label for="lname">Last Name*</label>
+                <input type="text" class="form-control" id="lname" value="" placeholder="Enter your last name">
+              </div>
+              <div class="form-group">
+                <label for="sign-email">Email*</label>
+                <input type="email" class="form-control" id="sign-email" value=""
+                  placeholder="Enter your email address">
+              </div>
+              <div class="form-group">
+                <label for="sign-password">Password*</label>
+                <input type="password" class="form-control" id="sign-password" value=""
+                  placeholder="Enter your password">
+              </div>
+              <div class="form-group">
+                <label for="confirm-password">Confirm Password*</label>
+                <input type="password" class="form-control" id="confirm-password" value=""
+                  placeholder="Confirm your password">
+              </div>
+              <div class="form-group form-sign">
+                <input type="checkbox" class="form-sign-input" id="signup">
+                <label class="form-sign-label" for="signup">Sign me up for all the latest
+                  offers.</label>
+              </div>
+              <a href="index.html" type="button" class="btn btn-primary btn-lg btn-block">Sign up with
+                email</a>
+              <p class="psign">By signing up I agree to Hazels cake's <a href="#">Terms & Conditions</a>
+                and <a href="#">Privacy Policy</a>.</p>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+
+{% block extra_javascript %}
+
+{% endblock %}

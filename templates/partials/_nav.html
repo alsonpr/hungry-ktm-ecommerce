@@ -1,0 +1,61 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light secondarynav">
+    <div class="menu">
+        <div class="close-menu">
+            <img src="{% static 'img/close.png' %}" width="20px">
+        </div>
+
+        <ul>
+            <li><a href="#">Featured Items</a></li>
+            <li>
+                <div class="btn-group dropright">
+                    <a href="#">
+                        Meat
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div class="btn-group dropright">
+                    <a href="#">
+                        Dairy
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div class="btn-group dropright">
+                    <a href="#">
+                        Bakery
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="mhead">
+        <img class="menu-ham" src="{% static 'img/hamburger.png' %}" width="20px">
+        <header>Menu</header>
+    </div>
+
+
+    <a class="navbar-brand" href="index.html">
+        <img id="main-logo" src="{% static 'img/logo.png' %}">
+    </a>
+    <div class="icon">
+        <ul>
+            <li><a href="cart.html"><img src="{% static 'icons/cart 1.png' %}" width="25px" height="25px"></a></li>
+            <li>
+                <a href="#" class="dropdown" data-toggle="dropdown" type="button"><img
+                        src="{% static 'icons/profile.png' %}" width="25px" height="25px"></a>
+                <div class="dropdown-menu" id="NotLoggeddIn">
+                    <a class="dropdown-item" href="login.html">Login</a>
+                    <a class="dropdown-item" href="signup.html">SignUp</a>
+                </div>
+                <div class="dropdown-menu" id="LoggedIn">
+                    <a class="dropdown-item" href="#">My Profile</a>
+                    <a class="dropdown-item" href="#">Log Out</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="clc"></div>
+</nav>

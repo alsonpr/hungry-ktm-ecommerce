@@ -1,0 +1,46 @@
+<!-- Footer Starts -->
+{% load static %}
+{% load cart_template_tags %}
+<footer>
+    <div class="container foot">
+        <div class="f3 wow fadeIn" data-wow-duration="2s" data-wow-delay="0.3s">
+            <h6>Categories</h6>
+            <ul class="footer-list">
+
+                {% for category in request.user|categories  %}
+                <li><a href="{{category.get_absolute_url}}">{{category.name}}</a></li>
+
+                {% endfor %}
+
+
+            </ul>
+        </div>
+        <div class="f1  wow fadeIn" data-wow-duration="2s" data-wow-delay="0.1s">
+            <h6>Contact</h6>
+            <ul class="footer-list">
+                {% for info in request.user|contacts  %}
+                <li>{{info.location}}</li>
+                <li>{{info.phone}}</li>
+                <li>{{info.email}}</li>
+                {% endfor %}
+
+            </ul>
+        </div>
+        <div class="f4  wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
+            <h6>We Accept</h6>
+            <ul class="footer-list">
+                <li><a href="#"><img src="{% static 'img/cod.png' %}" width="100px" height="60px"></a></li>
+                <li><a href="#"><img src="{% static 'img/Khalti_Digital_Wallet_Logo.png' %}" width="100px" height="60px"></a></li>
+                <li><a href="#"><img src="{% static 'icons/visa.svg' %}" width="60px" height="60px"></a></li>
+            </ul>
+
+        </div>
+    </div>
+    <!-- <div class="container footsec text-center  wow fadeIn" data-wow-duration="2s" data-wow-delay="0.5s">
+        <h6>Follow Us</h6>
+        <a href="https://www.facebook.com"><img src="icons/facebook.svg" width="40px" height="40px"></a>
+        <a href="http://www.instagram.com"><img src="icons/instagram.svg" width="40px" height="40px"></a>
+        <a href="tel:+977 9861401823"><img src="icons/viber.svg" width="40px" height="40px"></a><br><br>
+        <p class="copyright">&copy 2019 HazelCakes All Right Reserved</p>
+    </div> -->
+</footer>

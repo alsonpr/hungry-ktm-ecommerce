@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Payment{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/animate.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'assets/icomoon/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/mstepper.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/mstepper.min.css' %}" type="text/css">
+
+{% endblock %}
+
+{% block page_content %}
+<script src="https://khalti.com/static/khalti-checkout.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="{% static 'payment/khalti.js' %}"></script>
+
+<!--Main Section Starts-->
+<main role="main">
+
+    <section class="bg-white">
+        <div class="container payment-section">
+
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <h4>Payment</h4>
+                </div> <!-- col -->
+            </div> <!-- row -->
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <ul class="stepper linear">
+                        <li class="step active">
+                            <div class="step-title waves-effect waves-dark">SignIn / Register</div>
+                            <div class="step-content">
+                                <p style="font-size: 14px;">Username : {{user.username}}<br>
+                                    Email: {{user.email}}</p>
+                                <button type="button"
+                                    class="btn btn-primary btn-lg btn-block payment-button next-step">Continue</button>
+                            </div>
+                        </li>
+                        <li class="step">
+                            <div class="step-title waves-effect waves-dark">Add Delivery Details</div>
+                            <div class="step-content">
+                                <div class="row">
+                                    <form id="checkout_form" class="needs-validation" novalidate>
+                                        {% csrf_token %}
+                                        {{form|crispy}}
+
+                                        <a style="color:white;padding:12px;"
+                                            class="btn btn-primary btn-lg btn-block payment-button"
+                                            onclick="checkout_form_button();" type="button">Add
+                                            Delivery
+                                            Address</a>
+
+                                        <button style="display: none;" id="hidden-submit"
+                                            class="btn btn-primary btn-lg btn-block payment-button next-step"></button>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </li>
+                        <li class="step">
+                            <div class="step-title waves-effect waves-dark">Payment Options</div>
+                            <div class="step-content">
+
+                                <!--Accordion-->
+                                <div id="accordion">
+
+                                    <div class="card payment-card">
+                                        <div class="card-header payment-card-header">
+                                            <a class="card-link" data-toggle="collapse" href="#collapseOne">
+                                                Khalti
+                                            </a>
+                                        </div>
+                                        <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                                            <div class="card-body">
+                                                <div id="payment-khalti"><img
+                                                        src="{% static 'img/Khalti_Digital_Wallet_Logo.png' %}"
+                                                        width="250px">
+                                                </div>
+                                                <div class="step-actions">
+                                                    <button
+                                                        class="waves-effect waves-dark btn btn-primary btn-block btn-lg payment-button next-step" id="khalti-payment">Pay
+                                                        Now</button>
+                                                </div>
+                                                <p class="small">Clicking on this will direct you to the payment
+                                                    gateway page.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="card payment-card">
+                                        <div class="card-header payment-card-header">
+                                            <a class="collapsed card-link" data-toggle="collapse" href="#collapseFour">
+                                                Cash on Delivery
+                                            </a>
+                                        </div>
+                                        <div id="collapseFour" class="collapse" data-parent="#accordion">
+                                            <div class="card-body">
+                                                <div id="payment-khalti"><img
+                                                    src="{% static 'img/cod.png' %}"
+                                                    width="250px">
+                                            </div>
+                                                <form method="POST" action="{%url 'core:place-order'%}">
+                                                    {%csrf_token%}
+                                                    <div class="step-actions">
+
+                                                        <button
+                                                            class="waves-effect waves-dark btn btn-primary btn-block btn-lg payment-button"
+                                                            onclick="place_delivery();">Pay
+                                                            at Delivery</button>
+
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--Accordion-->
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4">
+                    <h5 class="d-flex justify-content-between align-items-center payment-cart">
+                        <span class="">Your cart</span>
+                        <span class="badge badge-primary badge-pill">{{ order.items.count }}</span>
+                    </h5>
+                    <ul class="list-group mb-3">
+                        {% for order_item in order.items.all %}
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <h6 class="my-0">{{ order_item.quantity }} x {{ order_item.item.title}}</h6>
+                                <!-- <small class="text-muted">{{ order_item.item.description}}</small> -->
+                            </div>
+                            <p>Rs. {{ order_item.get_final_price }}</p>
+                        </li>
+                        {% endfor %}
+                        {% if order.coupon %}
+                        <li class="list-group-item d-flex justify-content-between bg-light">
+                            <div class="text-success">
+                                <h6 class="my-0">Promo code</h6>
+                                <small>{{ order.coupon.code }}</small>
+                            </div>
+                            <span class="text-success">-Rs.{{ order.coupon.amount }}</span>
+                        </li>
+                        {% endif %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Delivery Charge</span>
+                            <p>Rs. {{ delivery_charge }}</p>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <strong>Total (NRs)</strong>
+                            <strong>Rs. {{ order.get_total }}</strong>
+                        </li>
+                    </ul>
+                    {% if DISPLAY_COUPON_FORM %}
+                    <form class="card p-2" action="{% url 'core:add-coupon' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            {{ couponform.code }}
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary btn-md waves-effect m-0" type="submit">Redeem</button>
+                            </div>
+                        </div>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div> <!-- container -->
+    </section>
+
+</main>
+<!--Main Section Ends-->
+<script>
+    function checkout_form_button() {
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'core:checkout'%}",
+            data: $('#checkout_form').serialize(),
+            dataType: 'json',
+
+            success: function (json) {
+                $('#hidden-submit').click()
+            },
+            error: function (xhr, errmsg, err) {
+                alert("Please add all required fields of delivery address");
+                console.log("Error-->", xhr.status + ": " + xhr.responseText);
+            }
+        });
+    }
+</script>
+
+
+<script>
+   khalti_payment('{{product_name}}','{{product_slug}}','{{product_url}}','{{total_amount}}','{{csrf_token}}','{{public_key}}')
+</script>
+
+
+{% endblock %}
+
+
+
+{% block extra_javascript %}
+<script type="text/javascript" src="{% static 'js/mstepper.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/mstepper.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/payment.js' %}"></script>
+
+
+
+{% endblock extra_javascript %}
